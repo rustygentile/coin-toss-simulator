@@ -1,16 +1,7 @@
-
-// Dimensions and margins
-var margin = { top: 20, right: 20, bottom: 50, left: 70 }
-var width = 480 - margin.left - margin.right;
-var height = 320 - margin.top - margin.bottom;
-
-// Use this to reduce the data in our second plot
-var dropRows = 100;
-
 // Our line chart blueprint
 class LineChart {
 
-    constructor(elementName) {
+    constructor(elementName, windowed) {
 
         // Scales and axes
         this.x = d3.scaleLinear().range([0, width]);
@@ -28,9 +19,11 @@ class LineChart {
                 "translate(" + margin.left + "," + margin.top + ")");
 
         // Initialise x axis
+        this.x.domain([0, 1]);
         this.svg.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .attr("class", "lineChartXAxis");
+            .attr("class", "lineChartXAxis")
+            .call(this.xAxis);
 
         // x axis label
         this.svg.append("text")
@@ -41,8 +34,10 @@ class LineChart {
             .text("# flips");
 
         // Initialize y axis
+        this.y.domain([0, 1]);
         this.svg.append("g")
-            .attr("class", "lineChartYAxis");
+            .attr("class", "lineChartYAxis")
+            .call(this.yAxis);
 
         // y axis label
         this.svg.append("text")
@@ -59,22 +54,47 @@ class LineChart {
             .attr("fill", "none")
             .attr("stroke", "steelblue")
             .attr("stroke-width", 1.5);
-    }
+
+        if (!windowed) {
+            this.svg.append("line")
+                .attr("id", "top_line")
+                .attr("class", "dashed")
+                .attr("stroke", "grey")
+                .attr("stroke-width", 0.5)
+                .attr("x1", 0)
+                .attr("y1", 1)
+                .attr("x2", 1)
+                .attr("y2", 1);
+            this.svg.append("line")
+                .attr("id", "bottom_line")
+                .attr("class", "dashed")
+                .attr("stroke", "grey")
+                .attr("stroke-width", 0.5)
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", 1)
+                .attr("y2", 0);
+        }
+    };
 };
 
 
-// Create two line charts
-var svgLineFull = new LineChart("#line_chart_full");
-var svgLineReduced = new LineChart("#line_chart_reduced");
-
 // For updating the charts with new data
-function renderLineCharts(oldData, newData, speed) {
+function renderLineCharts(oldData, newData, speed, svgLineFull, svgLineReduced) {
 
     // Calculate our moving window based on the filtered data set
-    var yWindowMin = d3.min(newData.slice(dropRows), function (d) { return d.probability });
-    var yWindowMax = d3.max(newData.slice(dropRows), function (d) { return d.probability });
     var xWindowMin = d3.min(newData.slice(dropRows), function (d) { return d.flipNumber });
     var xWindowMax = d3.max(newData.slice(dropRows), function (d) { return d.flipNumber });
+    var yWindowMin = d3.min(newData.slice(dropRows), function (d) { return d.probability });
+    var yWindowMax = d3.max(newData.slice(dropRows), function (d) { return d.probability });
+
+    // Make sure the y axis is centered at 0.5
+    if (0.5 - yWindowMin > yWindowMax - 0.5) {
+        yWindowMax = 0.5 + (0.5 - yWindowMin);
+    }
+    else {
+        yWindowMin = 0.5 - (yWindowMax - 0.5);
+    }
 
     // For the full chart, we fix the x axis to start at 0...
     svgLineFull.x.domain(
