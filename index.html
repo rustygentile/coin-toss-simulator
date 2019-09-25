@@ -18,24 +18,23 @@
         </div>
         <div class="row">
         </div>
-        <div class="row">
-            <button id="button1" onclick="runSim()">Start Simulation</button>
-            <button id="button2" onclick="resetSim()">Reset</button>
+        <div class="row" id="button-row">
+            <button id="button-1" onclick="newSimulation()">Start</button>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div id="line_chart_full"></div>
+                <div id="line-chart-full"></div>
             </div>
             <div class="col-md-6">
-                <div id="line_chart_reduced"></div>
+                <div id="line-chart-reduced"></div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div id="histogram_full"></div>
+                <div id="histogram-full"></div>
             </div>
             <div class="col-md-6">
-                <div id="histogram_reduced"></div>
+                <div id="histogram-reduced"></div>
             </div>
         </div>
     </div>
@@ -50,9 +49,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-
-    <!--Interpolate plugin-->
-    <script src="https://unpkg.com/d3-interpolate-path/build/d3-interpolate-path.min.js"></script>
 
     <!--Main app-->
     <script src="js/chart-config.js"></script>

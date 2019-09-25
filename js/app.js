@@ -1,5 +1,10 @@
+/*
+Contains the logic for animating the charts and interacting with the buttons.
+*/
+
 // Some global parameters
 var simulationRunning;
+var simulationComplete;
 
 var simulationData;
 var numberHeads;
@@ -11,16 +16,29 @@ var maxLines = 1000;
 var maxFlips = 1000000;
 
 // Create two line charts
-var svgLineFull = new LineChart("#line_chart_full");
-var svgLineReduced = new LineChart("#line_chart_reduced");
+var svgLineFull = new LineChart("#line-chart-full");
+var svgLineReduced = new LineChart("#line-chart-reduced");
+
+// Create two histograms charts
+var histogramFull = new Histogram("#histogram-full");
+var histogramReduced = new Histogram("#histogram-reduced");
 
 // Function for updating and rendering all charts
 async function updateChart() {
     if (simulationRunning) {
         if (n * maxLines < maxFlips * maxLines) {
             n = n * 1.025;
+
+            // When we reach the end of our data set
             if (n * maxLines > maxFlips * maxLines) {
                 n = maxFlips * maxLines / maxLines;
+                simulationComplete = true;
+                simulationRunning = false;
+
+                // Update the button
+                var buttonEle = document.getElementById("button-1");
+                buttonEle.textContent = "Reset";
+                buttonEle.onclick = resetSimulation;
             }
             var reducedData = [];
             for (var i = 0; i < maxLines; i++) {
@@ -33,14 +51,15 @@ async function updateChart() {
     }
 }
 
-function runSim() {
+function newSimulation() {
 
     // Update the button
-    var buttonEle = document.getElementById("button1");
-    buttonEle.textContent = "Stop Simulation";
-    buttonEle.onclick = stopSim;
+    var buttonEle = document.getElementById("button-1");
+    buttonEle.textContent = "Stop";
+    buttonEle.onclick = stopSimulation;
 
     simulationRunning = true;
+    simulationComplete = false;
     simulationData = [];
     numberHeads = 0;
     numberTails = 0;
@@ -67,51 +86,67 @@ function runSim() {
     }
 };
 
-function stopSim() {
+function stopSimulation() {
 
     // Stop the simulation
     simulationRunning = false;
 
     // Update the button
-    var buttonEle = document.getElementById("button1");
-    buttonEle.textContent = "Reusme Simulation";
-    buttonEle.onclick = resumeSim;
+    var buttonEle = document.getElementById("button-1");
+    buttonEle.textContent = "Resume";
+    buttonEle.onclick = resumeSimulation;
+
+    // Create a reset button
+    var resetButtonEle = document.createElement("BUTTON");
+    resetButtonEle.innerHTML = "Reset";
+    resetButtonEle.onclick = resetSimulation;
+    resetButtonEle.id = "button-2";
+    buttonEle.parentElement.append(resetButtonEle);
 }
 
-function resumeSim() {
+function resumeSimulation() {
 
     // Start the simulation
     simulationRunning = true;
     setTimeout(updateChart, speed);
 
     // Update the button
-    var buttonEle = document.getElementById("button1");
-    buttonEle.textContent = "Stop Simulation";
-    buttonEle.onclick = stopSim;
+    var buttonEle = document.getElementById("button-1");
+    buttonEle.textContent = "Stop";
+    buttonEle.onclick = stopSimulation;
+
+    // Remove the reset button
+    var resetElement = document.getElementById("button-2");
+    resetElement.parentNode.removeChild(resetElement);
 
 }
 
-function resetSim() {
+function resetSimulation() {
 
     // Stop the simulation
     simulationRunning = false;
 
     // Remove the old line charts
-    var lineFull = document.getElementById("line_chart_full");
+    var lineFull = document.getElementById("line-chart-full");
     while (lineFull.firstChild) {
         lineFull.removeChild(lineFull.firstChild);
     }
-    var lineReduced = document.getElementById("line_chart_reduced");
+    var lineReduced = document.getElementById("line-chart-reduced");
     while (lineReduced.firstChild) {
         lineReduced.removeChild(lineReduced.firstChild);
     }
 
     // Recreate the line charts
-    svgLineFull = new LineChart("#line_chart_full");
-    svgLineReduced = new LineChart("#line_chart_reduced");
+    svgLineFull = new LineChart("#line-chart-full");
+    svgLineReduced = new LineChart("#line-chart-reduced");
 
-    // Update the button
-    var buttonEle = document.getElementById("button1");
-    buttonEle.textContent = "Start Simulation";
-    buttonEle.onclick = runSim;
+    // Update the buttons
+    var buttonEle = document.getElementById("button-1");
+    buttonEle.textContent = "Start";
+    buttonEle.onclick = newSimulation;
+
+    // Remove the reset button
+    var resetElement = document.getElementById("button-2");
+    resetElement.parentNode.removeChild(resetElement);
+
 }

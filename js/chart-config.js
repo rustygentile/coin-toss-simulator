@@ -1,3 +1,7 @@
+/*
+Some common config parameters for the charts.
+*/
+
 // Dimensions and margins
 if (screen.width < 960) {
 
@@ -14,6 +18,7 @@ else {
 
 };
 
-
 // Use this to reduce the data in our second set of plots
 var dropRows = 100;
+
+var nBins = 100;
