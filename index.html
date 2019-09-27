@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style/reset.css">
+    <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://d3js.org/d3.v4.js"></script>
@@ -12,29 +13,23 @@
 <body>
 
     <div class="container">
-        <div class="row">
-            <H1>Coin Toss Simulator</H1>
-            </br>
-        </div>
-        <div class="row">
-        </div>
         <div class="row" id="button-row">
             <button id="button-1" onclick="newSimulation()">Start</button>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div id="line-chart-full"></div>
+                <div id="line-chart-full" class="svg-container"></div>
             </div>
             <div class="col-md-6">
-                <div id="line-chart-reduced"></div>
+                <div id="line-chart-reduced" class="svg-container"></div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div id="histogram-full"></div>
+                <div id="histogram-full" class="svg-container"></div>
             </div>
             <div class="col-md-6">
-                <div id="histogram-reduced"></div>
+                <div id="histogram-reduced" class="svg-container"></div>
             </div>
         </div>
     </div>

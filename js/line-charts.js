@@ -12,8 +12,9 @@ class LineChart {
         // Initialize SVG elements
         this.svg = d3.select(elementName)
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 480 320")
+            .classed("svg-content", true)
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");

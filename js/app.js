@@ -1,5 +1,5 @@
 /*
-Contains the logic for animating the charts and interacting with the buttons.
+* Contains the logic for animating the charts and interacting with the buttons.
 */
 
 // Some global parameters
@@ -145,8 +145,11 @@ function resetSimulation() {
     buttonEle.textContent = "Start";
     buttonEle.onclick = newSimulation;
 
-    // Remove the reset button
-    var resetElement = document.getElementById("button-2");
-    resetElement.parentNode.removeChild(resetElement);
+    // Remove the reset button if it still exists
+    try {
+        var resetElement = document.getElementById("button-2");
+        resetElement.parentNode.removeChild(resetElement);
+    }
+    catch (e) { }
 
 }

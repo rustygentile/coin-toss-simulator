@@ -12,8 +12,11 @@ class Histogram {
         // Initialize svg element
         this.svg = d3.select(elementName)
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("preserveAspectRatio", "xMinYMin slice")
+            .attr("viewBox", "0 0 480 320")
+            .classed("svg-content", true)
+            // .attr("width", width + margin.left + margin.right)
+            // .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
@@ -31,7 +34,7 @@ class Histogram {
                 "translate(" + (width / 2) + " ," +
                 (height + margin.top + 20) + ")")
             .style("text-anchor", "middle")
-            .text("Relative Frequency");
+            .text("Rel. freq.");
 
         // Initialize y axis
         this.y.domain([0, 1]);
@@ -46,7 +49,7 @@ class Histogram {
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("#");
+            .text("Count");
 
         // Initialize the bars
         this.dummyData = new Array(nBins).fill(0);
