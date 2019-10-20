@@ -16,8 +16,8 @@ var maxLines = 1000;
 var maxFlips = 1000000;
 
 // Create two line charts
-var svgLineFull = new LineChart("#line-chart-full");
-var svgLineReduced = new LineChart("#line-chart-reduced");
+var svgLineFull = new LineChart("#line-chart-full", false);
+var svgLineReduced = new LineChart("#line-chart-reduced", true);
 
 // Create two histograms charts
 var histogramFull = new Histogram("#histogram-full");
@@ -137,8 +137,8 @@ function resetSimulation() {
     }
 
     // Recreate the line charts
-    svgLineFull = new LineChart("#line-chart-full");
-    svgLineReduced = new LineChart("#line-chart-reduced");
+    svgLineFull = new LineChart("#line-chart-full", false);
+    svgLineReduced = new LineChart("#line-chart-reduced", true);
 
     // Update the buttons
     var buttonEle = document.getElementById("button-1");

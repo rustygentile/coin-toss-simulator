@@ -56,25 +56,39 @@ class LineChart {
             .attr("stroke", "steelblue")
             .attr("stroke-width", 1.5);
 
+        // Cast our functions so we can use them here
+        var mX = this.x;
+        var mY = this.y;
+
+        // For our full line chart, add a dashed line which shows how the other chart is filtered
         if (!windowed) {
+
+            // Initial values
+            this.oldYWindowMin = 0;
+            this.oldYWindowMax = 1;
+            this.windowStrokeWidth = 2;
+
+            // Initial dashed line for animation
             this.svg.append("line")
                 .attr("id", "top_line")
-                .attr("class", "dashed")
+                .attr("class", "line")
+                .style("stroke-dasharray", ("3, 3"))
                 .attr("stroke", "grey")
-                .attr("stroke-width", 0.5)
-                .attr("x1", 0)
-                .attr("y1", 1)
-                .attr("x2", 1)
-                .attr("y2", 1);
+                .attr("stroke-width", 2)
+                .attr("x1", mX(0))
+                .attr("y1", mY(1))
+                .attr("x2", mX(1))
+                .attr("y2", mY(1));
             this.svg.append("line")
                 .attr("id", "bottom_line")
-                .attr("class", "dashed")
+                .attr("class", "line")
+                .style("stroke-dasharray", ("3, 3"))
                 .attr("stroke", "grey")
-                .attr("stroke-width", 0.5)
-                .attr("x1", 0)
-                .attr("y1", 0)
-                .attr("x2", 1)
-                .attr("y2", 0);
+                .attr("stroke-width", 2)
+                .attr("x1", mX(0))
+                .attr("y1", mY(0))
+                .attr("x2", mX(1))
+                .attr("y2", mY(0));
         }
     };
 };
@@ -111,25 +125,51 @@ function renderLineCharts(oldData, newData, speed, svgLineFull, svgLineReduced) 
         [0, 1]
     );
 
+    // Animate the y axis transition
     svgLineFull.svg.selectAll(".lineChartYAxis")
         .transition()
         .duration(speed)
         .call(svgLineFull.yAxis);
 
+    // Create a new line
     var fullLine = d3.line()
         .x(function (d) { return svgLineFull.x(d.flipNumber) })
         .y(function (d) { return svgLineFull.y(d.probability) });
 
+    // Animate the transition to the new line
     svgLineFull.svg.select('#line_chart_path')
         .attr('d', fullLine(oldData))
         .transition()
         .attr('d', fullLine(newData))
         .duration(speed);
 
+    // Animate the dashed line showing the window of data
+    svgLineFull.svg.select('#top_line')
+        .attr("y1", svgLineFull.y(svgLineFull.oldYWindowMax))
+        .attr("y2", svgLineFull.y(svgLineFull.oldYWindowMax))
+        .transition()
+        .attr("y1", svgLineFull.y(yWindowMax))
+        .attr("y2", svgLineFull.y(yWindowMax))
+        .duration(speed);
+
+    svgLineFull.svg.select('#bottom_line')
+        .attr("y1", svgLineFull.y(svgLineFull.oldYWindowMin))
+        .attr("y2", svgLineFull.y(svgLineFull.oldYWindowMin))
+        .transition()
+        .attr("y1", svgLineFull.y(yWindowMin))
+        .attr("y2", svgLineFull.y(yWindowMin))
+        .duration(speed);
+
+    // Update old values for the next frame
+    svgLineFull.oldYWindowMax = yWindowMax;
+    svgLineFull.oldYWindowMin = yWindowMin;
+
     // Create the X axis:
     svgLineReduced.x.domain(
         [xWindowMin, xWindowMax]
     );
+
+    // Animate the x axis transition
     svgLineReduced.svg.selectAll(".lineChartXAxis").transition()
         .transition()
         .duration(speed)
@@ -139,18 +179,23 @@ function renderLineCharts(oldData, newData, speed, svgLineFull, svgLineReduced) 
     svgLineReduced.y.domain(
         [yWindowMin, yWindowMax]
     );
+
+    // Animate the y axis transition
     svgLineReduced.svg.selectAll(".lineChartYAxis")
         .transition()
         .duration(speed)
         .call(svgLineReduced.yAxis);
 
+    // Create a new line
     var reducedLine = d3.line()
         .x(function (d) { return svgLineReduced.x(d.flipNumber) })
         .y(function (d) { return svgLineReduced.y(d.probability) });
 
+    // Animate the line transition
     svgLineReduced.svg.select('#line_chart_path')
         .attr('d', reducedLine(oldData.slice(dropRows)))
         .transition()
         .attr('d', reducedLine(newData.slice(dropRows)))
         .duration(speed)
+
 };
