@@ -13,23 +13,33 @@
 <body>
 
     <div class="container">
+    </br>
         <div class="row" id="button-row">
             <button id="button-1" onclick="newSimulation()">Start</button>
         </div>
         <div class="row">
             <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p style="text-align:center">Number of Flips</p>
+                        <div id="flips-gauge" class="svg"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <p style="text-align:center">Relative Frequency</p>
+                        <div id="frequency-gauge" class="svg"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="scatter-chart" class="svg-container"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="line-chart-reduced" class="svg-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div id="line-chart-full" class="svg-container"></div>
-            </div>
-            <div class="col-md-6">
-                <div id="line-chart-reduced" class="svg-container"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div id="histogram-full" class="svg-container"></div>
-            </div>
-            <div class="col-md-6">
-                <div id="histogram-reduced" class="svg-container"></div>
             </div>
         </div>
     </div>
@@ -48,7 +58,7 @@
     <!--Main app-->
     <script src="js/chart-config.js"></script>
     <script src="js/line-charts.js"></script>
-    <script src="js/histograms.js"></script>
+    <script src="js/gauge-chart.js"></script>
     <script src="js/app.js"></script>
 
 </body>

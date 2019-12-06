@@ -100,9 +100,22 @@ function renderLineCharts(oldData, newData, speed, svgLineFull, svgLineReduced) 
     // Calculate our moving window based on the filtered data set
     var xWindowMin = d3.min(newData.slice(dropRows), function (d) { return d.flipNumber });
     var xWindowMax = d3.max(newData.slice(dropRows), function (d) { return d.flipNumber });
-    var yWindowMin = d3.min(newData.slice(dropRows), function (d) { return d.probability });
-    var yWindowMax = d3.max(newData.slice(dropRows), function (d) { return d.probability });
 
+    newYWindowMin = d3.min(newData.slice(dropRows), function (d) { return d.probability });
+    newYWindowMax = d3.max(newData.slice(dropRows), function (d) { return d.probability });
+
+    if (newYWindowMin > svgLineFull.oldYWindowMin) {
+        var yWindowMin = newYWindowMin;
+    } else {
+        var yWindowMin = svgLineFull.oldYWindowMin
+    };
+
+    if (newYWindowMax < svgLineFull.oldYWindowMax) {
+        var yWindowMax = newYWindowMax;
+    } else {
+        var yWindowMax = svgLineFull.oldYWindowMax;
+    };
+    
     // Make sure the y axis is centered at 0.5
     if (0.5 - yWindowMin > yWindowMax - 0.5) {
         yWindowMax = 0.5 + (0.5 - yWindowMin);
