@@ -19,20 +19,13 @@ var maxFlips = 1000000;
 var svgLineFull = new LineChart("#line-chart-full", false);
 var svgLineReduced = new LineChart("#line-chart-reduced", true);
 
-// Setup the gauge charts
-var flipsGauge = gaugeChart(0, maxFlips, speed, "1.1e")
-.width(260)
-.height(150)
-.innerRadius(50)
-.outerRadius(80);
-
+// Setup the gauge chart
 var freqencyGauge = gaugeChart(0, 1, speed, ".3f")
 .width(260)
 .height(150)
 .innerRadius(50)
 .outerRadius(80);
 
-d3.select("#flips-gauge").datum([0]).call(flipsGauge);
 d3.select("#frequency-gauge").datum([0]).call(freqencyGauge);
 
 // Setup the scatter
@@ -62,7 +55,6 @@ async function updateChart() {
             renderLineCharts(oldReducedData, reducedData, speed, svgLineFull, svgLineReduced);
             oldReducedData = reducedData;
 
-            d3.select("#flips-gauge").datum([reducedData[maxLines - 1].flipNumber]).call(flipsGauge);
             d3.select("#frequency-gauge").datum([reducedData[maxLines - 1].probability]).call(freqencyGauge);
         }
         setTimeout(updateChart, speed);
